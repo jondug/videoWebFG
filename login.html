@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>注册</title>
+    <link rel="stylesheet" type="text/css" href="blibli.css">
+    <link rel="stylesheet" type="text/css" href="blibli.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+</head>
+
+<body>
+    <div id="app">
+        <div class="head">
+            <div style="display:block;display: flex;"><img style="width: 100px;height: 60px;"
+                    src="../bilibil图片/Snipaste_2021-06-03_11-54-15.png">
+                <div
+                    style="display: flex; letter-spacing: 3px;height: 60px;line-height: 60px;display: inline-block;vertical-align: middle;">
+                    主站 番剧 游戏中心 直播 会员购 漫画 赛事 BW <img style="line-height: 60px;vertical-align: top;margin-top: 13px;"
+                        src="../bilibil图片/手机.png">下载APP</div>
+            </div>
+            <div style="line-height: 60px;">
+                <input type="text" style="width: 450px;height: 30px;"><img style="vertical-align: top;margin-top: 13px;"
+                    src="../bilibil图片/Snipaste_2021-06-07_15-44-33.png">
+            </div>
+            <div style="letter-spacing: 3px;display: flex;"><span style="color: #00a1d6;margin-right: 10px;">
+                    <h2>登录</h2>
+                </span>大会员 消息 动态 收藏 历史记录 创作中心<div
+                    style="margin-top:10px; width: 100px;height: 35px;background-color: #fb7299;line-height: 35px;text-align: center;">
+                    <h1 style="color: white;font-size: 30px;">投稿</h1>
+                </div>
+            </div>
+        </div>
+        <div class="backgroundhead"></div>
+        <div class="Login">
+            <div class="head " style="border-bottom: 1px solid grey;">
+                <h3 style="margin:0 auto;">注册</h3>
+            </div>
+            <div class="story">
+                <br><br><br>
+                <input type="text" v-model="nickname" placeholder="昵称">
+                <br><br><br>
+                <input type="text" v-model="account" placeholder="账号">
+                <br><br><br>
+                <input type="password" v-model="pwd" placeholder="密码">
+                <br><br><br>
+                <input type="password" v-model="pwd1" placeholder="确认密码">
+                <br><br>
+                <input style="vertical-align: top; width: 20px;height: 20px;" type="checkbox">我已同意<span
+                    style="color: #00a1de">《哔哩哔哩弹幕网用户使用协议》</span>和<span style="color: #00a1de">《哔哩哔哩隐私政策》</span>
+                <br><br>
+                <input style="width: 50px;height: 30px;" type="submit" value="注册" @click="register">
+
+            </div>
+            <div class="link">
+                <div class="hezi">
+                    <span style="color:#9999a6">
+                        <h2>Blibli</h2>
+                    </span><br>
+                    <ul>
+                        <li>关于我们</li><br>
+                        <li>联系我们</li><br>
+                        <li>用户协议</li><br>
+                        <li>加入我们</li><br>
+                    </ul>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <ul>
+                        <li>友情链接</li><br>
+                        <li>隐私政策</li><br>
+                        <li>bilibli认证</li><br>
+                        <li>Inverstore</li><br>
+                    </ul>
+
+
+                </div>
+                <div class="hezi">
+                    <span style="color:#9999a6">
+                        <h2>传送门</h2>
+                    </span><br>
+                    <ul>
+                        <li>官网</li><br>
+                        <li>登录/注册</li><br>
+                        <li>用户管理</li><br>
+                    </ul>
+                </div>
+                <div class="hezi">
+                    <img src="../bilibil图片/Snipaste_2021-06-07_15-42-36.png">&nbsp;&nbsp;
+                    <img src="../bilibil图片/Snipaste_2021-06-07_15-42-41.png">&nbsp;&nbsp;
+                    <img src="../bilibil图片/Snipaste_2021-06-07_15-42-46.png">&nbsp;&nbsp;
+                </div>
+            </div>
+            <div class="workpartment"></div>
+        </div>
+
+    </div>
+    <script>
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                serverurl: "http://localhost:8080/",
+                nickname: "",
+                account: "",
+                pwd: "",
+                pwd1: "",
+            },
+            methods: {
+                register() {
+                    var that = this;
+                    $.ajax({
+                        method: "GET",//请求模式，默认是GET
+                        headers: {//请求头，可以省略
+                            Accept: "application/json; charset=utf-8"
+                        },
+                        url: that.serverurl + "user/register?account=" + that.account + "&pwd=" + that.pwd + "&enterpwd=" + that.pwd1,//请求路径，必传
+                    }).done(function (msg) {
+                        alert(msg.msg)
+
+                    });
+
+                },
+                tiaozhuan(id) {
+                    localStorage.setItem("key", id)
+                    window.location.href = "contentDemo.html"
+
+                }
+            }
+        })
+
+    </script>
+
+</body>
+
+</html>

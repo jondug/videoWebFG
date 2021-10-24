@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>subarea</title>
+</head>
+
+<body style="background-color: #f0f0f0;">
+    <style>
+        .nav-a {
+            height: 10vh;
+            padding-top: 15px;
+            margin-bottom: 14px;
+            display: flex;
+            width: 90%;
+            margin: 0 auto;
+            /* //文字不被拉伸 */
+            white-space: nowrap;
+
+
+
+        }
+
+        .nav-a-1 {
+
+            display: flex;
+            flex: 3;
+            /* 文字左右，垂直居中 */
+            text-align: center;
+            align-items: center;
+            /* background-color: blanchedalmond; */
+
+
+        }
+
+        .nav-a-2 {
+            /* height: 174px; */
+            flex: 4;
+            display: flex;
+            /* margin-left: 2vw; */
+            /* background-color: aquamarine; */
+            margin: 0 auto;
+            align-items: center;
+
+
+        }
+
+        .nav-a-3 {
+            /* height: 174px;
+            margin-left: 4vw; */
+            display: flex;
+            flex: 3;
+            text-align: center;
+            align-items: center;
+            /* background-color:antiquewhite ; */
+        }
+    </style>
+
+    <div id="app">
+
+        <!-- nav -->
+        <div class="nav-a">
+            <div class="nav-a-1">
+                <div v-for="(nl , index) in nav_left"><a v-if="index==0" style="color: #000;"
+                        href="./index01.html">{{nl}}&ensp;</a><span v-if="index!=0">{{nl}}&ensp;</span>&ensp;</div>
+            </div>
+            <!-- 搜索 -->
+            <div class="nav-a-2">
+
+                <input type="text" style="width: 17vw;height: 35px;" v-model="seek1"> 
+
+                <button type="button" style="width: 5vw;height: 35px;margin-left: 1vw;"
+                    class="btn btn-primary" @click="seekmethod">搜索</button>
+
+
+            </div>
+            <div class="nav-a-3">
+                <div v-if="this.login==0" style="margin-right: 20px;" @click="ab">
+                    <span style="color: #fb7299; ">请登录</span>
+                </div>
+                <div class="yidenglu" v-if="this.login==1" style="margin-right: 1vw;"
+                    @click="location.href='./management.html'"><img :src="'http://localhost:8080/'+ uinfo.via"
+                        style="width: 50px;height: 50px;border-radius: 50%;" alt="">
+                    <div style="color: #fb7299;">{{uinfo.nickname}}</div>
+                </div>
+
+                <div v-for="(nr , index) in nav_right">{{nr}} &ensp;</div>
+
+                <div v-if="this.login==0">
+                    <button type="button"
+                        style="width: 130px;height: 50px;background-color: red;color: #fff;">投稿</button>
+                </div>
+
+                <div v-if="this.login==1">
+                    <button type="button"
+                        style="width: 130px;height: 50px;background-color: #fb7299;color: #fff;">投稿</button>
+                </div>
+                <button @click="tuichu">退出</button>
+            </div>
+
+        </div>
+
+        <!-- 内容 -->
+
+        <div style="width: 80%;margin: 5vh auto;display: flex;flex-wrap: wrap;">
+            <div v-for="i in works" style="width: 200px;height: 220px;background-color: #ffffff;margin: 30px 30px;" @click="tiaozhuan(i.worksid)">
+                <img :src="'http://localhost:8080/'+i.photo" style="width: 200px;height: 130px;" alt="">
+                <div style="text-align: center;margin-top: 10px;"><p>{{i.title}}</p></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var app = new Vue({
+            el: "#app",
+            data: {
+                serverurl: "http://localhost:8080/",
+                nav_left: ["主站", "番剧", "游戏中心", "直播", "会员购", "漫画", "赛事"],
+                nav_right: ['大会员', '消息', '动态', '收藏', '历史', '创作中心'],
+                login: false,
+                uinfo:[],
+                works:[],
+                seek1:"",
+
+            },
+            created: function () {
+                this.subarea()
+                if (localStorage.getItem("login") == 1) {
+                    this.login = 1
+                    this. userinfomethod()
+                } else {
+                    this.login = 0
+                }
+            },
+            methods: {
+                subarea(){
+                    var that = this
+                    $.ajax({
+                        mothod:"get",
+                        url:that.serverurl+"works/sub?subareaid="+localStorage.getItem("sub"),
+                    }).done(function(msg){
+                        that.works=msg.works
+                       
+                        console.log(msg.works)
+                    })
+                },
+                userinfomethod() {
+                    var that = this;
+                    $.ajax({
+                        method: "GET",//请求模式，默认是GET
+                        headers: {//请求头，可以省略
+                            Accept: "application/json; charset=utf-8"
+                        },
+                        url: that.serverurl + "works/userinfo?userid=" + localStorage.getItem("id"),//请求路径，必传
+                    }).done(function (msg) {
+                        that.uinfo = msg.info
+
+
+                    });
+                },
+                tuichu() {
+
+                    localStorage.setItem("login", 0)
+                    localStorage.setItem("id", -1)
+                    this.login = 0
+                    console.log(this.login)
+                },
+                ab() {
+                    window.location.href = 'blibli项目/Blibili登录页面.html'
+                },
+                seekmethod(){
+                    localStorage.setItem("seek",this.seek1)
+                    window.location.href="./seek.html"
+                },
+                tiaozhuan(id) {
+                    localStorage.setItem("key", id)
+                    window.location.href = "contentDemo.html"
+
+                },
+            }
+        })
+    </script>
+</body>
+
+</html>

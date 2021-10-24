@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="./iconfont.js"></script>
+    <!-- <script src="./danmu.js"></script> -->
+    <title>内容</title>
+</head>
+
+<body>
+    <style>
+        .nav {
+            height: 174px;
+            /* background-color: antiquewhite; */
+        }
+
+        .nav-a {
+            height: 100px;
+
+            display: flex;
+            width: 90%;
+            margin: 22px auto;
+            /* //文字不被拉伸 */
+            white-space: nowrap;
+            /* background-image: url("test/video/bb.gif"); */
+            /* background-size: 90% 18%; */
+            /* color: #fff; */
+
+
+        }
+
+        .nav-a-1 {
+
+            display: flex;
+            flex: 3;
+            /* 文字左右，垂直居中 */
+            text-align: center;
+            align-items: center;
+            /* background-color: blanchedalmond; */
+
+
+        }
+
+        .nav-a-2 {
+            /* height: 174px; */
+            flex: 4;
+            display: flex;
+            /* margin-left: 2vw; */
+            /* background-color: aquamarine; */
+            margin: 0 auto;
+            align-items: center;
+
+
+        }
+
+        .nav-a-3 {
+            /* height: 174px;
+            margin-left: 4vw; */
+            display: flex;
+            flex: 3;
+            text-align: center;
+            align-items: center;
+            /* background-color:antiquewhite ; */
+        }
+
+        .icon {
+            width: 1em;
+            height: 1em;
+            vertical-align: -0.15em;
+            fill: currentColor;
+            overflow: hidden;
+        }
+
+
+
+        .conbox {
+            /* height: 100px; */
+
+            display: flex;
+            width: 90%;
+            margin: 22px auto;
+        }
+
+        .s_text {
+            width: 300px;
+            height: 35px;
+            line-height: 35px;
+            font-size: 16px;
+            font-family: "微软雅黑";
+            border-radius: 20px;
+            opacity: 0.8;
+        }
+
+        .s_btn {
+            width: 85px;
+            height: 35px;
+            /* line-height: 35px; */
+            /*div垂直居中 */
+            background: #22B14C;
+            color: #fff;
+            border-radius: 10px;
+            opacity: 0.8;
+            align-items: center;
+            /*文字垂直居中 */
+        }
+    </style>
+    <div id="app">
+        <!-- 导航栏 -->
+        <div class="nav">
+            <div class="nav-a">
+                <div class="nav-a-1">
+                    <div v-for="(nl , index) in nav_left"><a v-if="index==0" style="color: #000;"
+                            href="./index01.html">{{nl}}&ensp;</a><span v-if="index!=0">{{nl}}&ensp;</span>&ensp;</div>
+                </div>
+                <!-- 搜索 -->
+                <div class="nav-a-2">
+
+                   
+                <input type="text" style="width: 17vw;height: 35px;" v-model="seek"> 
+
+                <button type="button" style="width: 5vw;height: 35px;margin-left: 1vw;"
+                    class="btn btn-primary" @click="seekmethod">搜索</button>
+
+
+
+                </div>
+                <div class="nav-a-3">
+                    <div v-if="this.login==0" style="margin-right: 20px;" @click="ab">
+                        <span style="color: #fb7299; ">请登录</span>
+                    </div>
+                    <div class="yidenglu" v-if="this.login==1" style="margin-right: 1vw;" @click="management"><img
+                            :src="'http://localhost:8080/'+ uinfo.via"
+                            style="width: 50px;height: 50px;border-radius: 50%;" alt="">
+                        <div style="color: #fb7299;">{{uinfo.nickname}}</div>
+                    </div>
+
+                    <div v-for="(nr , index) in nav_right">{{nr}} &ensp;</div>
+
+
+                    <div v-if="this.login==0">
+                        <button type="button" @click="alert"
+                            style="width: 130px;height: 50px;background-color: red;color: #fff;">投稿</button>
+                    </div>
+
+                    <div v-if="this.login==1">
+                        <button type="button"
+                            style="width: 130px;height: 50px;background-color: #fb7299;color: #fff;">投稿</button>
+                    </div>
+
+                    <button @click="tuichu">退出</button>
+                </div>
+
+            </div>
+        </div>
+        <!-- 内容页 -->
+        <div class="conbox">
+
+        </div>
+        <div style="display: flex;margin: 0 auto;">
+            <div style="width: 800px;margin-left: 10%; ">
+                <!-- 标题 -->
+                <div>
+                    <h2>{{worksinfo.title}}</h2>
+                </div>
+                <!-- 视频 -->
+                <div style="width: 800px;height: 400px;background-color: #000;margin: 0 auto;">
+                    <video style="width: 700px; height: 350px; margin-left: 50px;margin-top: 25px;" controls autoplay>
+                        <source :src="'http://localhost:8080/'+ worksinfo.video" type="video/mp4">
+                        <!-- <source :src="'http://localhost:8080/'+ worksinfo.video" type="video/ogg"> -->
+                    </video>
+                </div>
+                <div class="send" style="margin: 10px auto;width: 600px;">
+                    <input type="text" class="s_text" placeholder="使用回车可以快速发送弹幕" />
+                    <input type="button" class="s_btn" value="发送" />
+                    <!--关闭弹幕功能-->
+                    <input type="button" class="s_btn" value="关闭弹幕" />
+                    <!-- <span class="barrage_close">关闭弹幕</span> -->
+                    <!-- 静音功能 -->
+                    <input type="button" class="s_btn" value="开启静音" />
+                    <!-- <span id="muted">开启静音</span> -->
+                </div>
+                <!-- 点赞栏 -->
+                <div style="display: flex;justify-content: space-between;margin: 40px auto;">
+                    <div style="display: flex;width: 400px;">
+                        <div class="ic" style="flex: 2"><img src="./img/dianzan.png" style="width: 40px;height: 40px;"
+                                alt=""></div>
+                        <div style="flex: 2;"><img src="./img/jinbi.png" style="width: 40px;height: 40px;" alt=""></div>
+                        <div style="flex: 2;"><img src="./img/shoucang.png" style="width: 40px;height: 40px;" alt="">
+                        </div>
+                        <div style="flex: 2;"><img src="./img/hanhan-01-01.png" style="width: 40px;height: 40px;"
+                                alt=""></div>
+                               
+                    </div>
+                    <div style="display: flex;width: 200px;">
+                        <input type="submit" value="投诉"
+                            style="border:  #0a1107;color: #df0f0f;background-color: #fff;margin: 0 10px;">
+                        <input type="submit" value="稍后再看"
+                            style="border: solid #fb7299;color: #fb7299;background-color: #fff;">
+                           
+                    </div>
+                </div>
+                <!-- 评论 -->
+                <div style="width: 800px;height: auto;margin: 20px auto;">
+                    <div style="width: 600px;">
+                        <h2>评论</h2>
+                    </div>
+                    <div style="width: 600px;height: 100px;margin: 0 auto;">
+
+                        <input type="text"
+                            style="width: 400px;height: 50px;background-color: #e5e9ef;margin-left: 75px;"
+                            placeholder="发一条友善的评论" v-model="pinglun1">
+                        <input type="submit" @click="commentpinglun" value="发表评论"
+                            style="background-color: #fb7299;height: 50px;color: #fff;;">
+                    </div>
+                    <div style="width: 600px;height: 300px;display: flex;margin: 30px auto;border-bottom: solid #000;padding-top: 40px;"
+                        v-for="i in comment">
+                        <div><img :src="'http://127.0.0.1:8080/'+ i.userinfo.via"
+                                style="width: 70px;height: 70px;border-radius: 50%;" alt=""></div>
+                        <div style="width: 600px;height: 250px;margin-left: 50px;align-items: center;">
+
+                            <h4>{{i.userinfo.nickname}}:</h4>
+                            <br>
+                            <p style="font-size: 25px;">{{i.comment.content}}</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div style="width: 400px;margin-left: 4%;">
+                <!-- 用户信息 -->
+                <div style="display: flex;">
+                    <div style="margin-top: 20px;">
+                        <img :src="'http://127.0.0.1:8080/'+ info.via" alt=""
+                            style="width: 70px;height: 70px;border-radius: 50%;">
+                    </div>
+                    <div style="margin-left: 20px;">
+                        <div>
+                            <h3>{{info.nickname}}</h3>
+                        </div>
+                        <div>
+                            <p>{{info.signature}}</p>
+                        </div>
+                        <div>
+                            <input type="submit" value="为他充电"
+                                style="border: solid #fb7299;background-color: #fff;color: #fb7299;width: 140px;">
+                            <input type="submit" value=关注 id="guanzhu" @click="guanzhu"
+                                style="border: solid #00a1d6;background-color: #fff;color: #00a1d6;width: 120px;margin-left: 15px;">
+
+                        </div>
+                        播放量：{{worksinfo.vv}}
+                    </div>
+                </div>
+                <div style="margin: 20px 0;">
+                    <h2>视频推荐</h2>
+                </div>
+                <div style="display: flex;margin: 30px 0;" v-for="(i,index) in hot" @click="tiaozhuan(i.worksid)">
+                    <div><img :src="'http://localhost:8080/'+i.photo" style="width: 180px;height: 100px;" alt=""></div>
+                    <div style="margin:0 15px;">
+                        <div>
+                            <h5>{{i.title}}</h5>
+                        </div>
+                        <!-- <div style="font-size: 2px;"><span>Up:卢麒元</span></div>
+                        <div style="font-size: 2px;"><span>播放量</span></div> -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+    <script>
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                serverurl: "http://localhost:8080/",
+                nav_left: ["主站", "番剧", "游戏中心", "直播", "会员购", "漫画", "赛事"],
+                nav_right: ['大会员', '消息', '动态', '收藏', '历史', '创作中心'],
+                worksinfo: [],
+                comment: [],
+                hot: [],
+                info: [],
+                id: 2,
+                pinglun1: "",
+                login: false,
+                uinfo: [],
+                seek:"",
+
+            },
+            created: function () {
+
+                this.userInto()
+                this.checkguanzhu()
+                if (localStorage.getItem("login") == 1) {
+                    this.login = 1
+                    this.userinfomethod()
+                    console.log(localStorage.getItem("login"))
+                }
+
+
+
+            },
+            mounted: function () {
+                $(function () {
+                    $(".ic").click(function () {
+                        $(this).css("background-color", "#00a1d6")
+                    })
+                })
+
+
+            },
+
+            methods: {
+                management(){
+                    window.location.href="./management.html"
+                },
+                userinfomethod() {
+                    var that = this;
+                    $.ajax({
+                        method: "GET",//请求模式，默认是GET
+                        headers: {//请求头，可以省略
+                            Accept: "application/json; charset=utf-8"
+                        },
+                        url: that.serverurl + "works/userinfo?userid=" + localStorage.getItem("id"),//请求路径，必传
+                    }).done(function (msg) {
+                        that.uinfo = msg.info
+
+
+                    });
+
+                },
+                userInto() {
+
+                    var that = this;
+                    var login1 = localStorage.getItem("login")
+                    $.ajax({
+                        method: "GET",//请求模式，默认是GET
+                        headers: {//请求头，可以省略
+                            Accept: "application/json; charset=utf-8"
+                        },
+                        url: "http://localhost:8080/works/works?worksid=" + localStorage.getItem("key"),//请求路径，必传
+
+                    }).done(function (msg) {
+                        that.worksinfo = msg.work
+                        that.comment = msg.comment
+                        that.hot = msg.hot
+                        that.info = msg.info
+                        that.userid1 = msg.info.userid
+                        var aaa = msg.info.userid
+                        console.log(that.userid1)
+
+
+                    });
+
+                    var aaab = this.aaa
+                    console.log(aaab)
+                    if (localStorage.getItem("login") == 1) {
+
+                    }
+
+                },
+                tiaozhuan(id) {
+                    localStorage.setItem("key", id)
+                    window.location.href = "contentDemo.html"
+
+                },
+                guanzhu() {
+
+                    var that = this;
+                    let a = this.userid
+                    if (localStorage.getItem("login") == 0) {
+                        alert("请登录")
+                    } else if (that.info.userid == localStorage.getItem("id")) {
+                        alert("不能关注自己")
+                    }
+                    else {
+
+                        $.ajax({
+                            method: "GET",//请求模式，默认是GET
+                            headers: {//请求头，可以省略
+                                Accept: "application/json; charset=utf-8"
+                            },
+                            url: "http://localhost:8080/user/attention?fansid=" + localStorage.getItem("id") + "&userid=" + that.info.userid,//请求路径，必传
+                        }).done(function (msg) {
+                            if (msg.res == 1) {
+                                $("#guanzhu").attr("value", "已关注")
+                                console.log(msg.res)
+                                // localStorage.setItem("gz",1)
+                            } else {
+                                $("#guanzhu").attr("value", "关注")
+                                // localStorage.setItem("gz",0)
+                                console.log(msg.res)
+                            }
+
+                        });
+
+                    }
+                },
+                checkguanzhu() {
+                    console.log("hello")
+                    var that = this
+                    $.ajax({
+                        method: "GET",//请求模式，默认是GET
+                        headers: {//请求头，可以省略
+                            Accept: "application/json; charset=utf-8"
+                        },
+                        url: "http://localhost:8080/user/checkattention?fansid=" + localStorage.getItem("id") + "&worksid=" + localStorage.getItem("key"),
+                    }).done(function (msg) {
+                        // localStorage.setItem("userid",-1)
+
+                        if (msg.res == 1) {
+                            $("#guanzhu").attr("value", "已关注")
+
+                        } else {
+                            $("#guanzhu").attr("value", "关注")
+
+                        }
+                    });
+                },
+                commentpinglun() {
+                    var that = this
+                    
+                    if (this.login != 1) {
+                            alert("请登录")
+                            return;
+                    }else if(this.pinglun1==""){
+                        alert("评论不能为空")
+                        return;
+                    }
+
+                
+                        $.ajax({
+                        method: "GET",//请求模式，默认是GET
+                        headers: {//请求头，可以省略
+                            Accept: "application/json; charset=utf-8"
+                        },
+                        url: "http://localhost:8080/works/publishCommnet?userid=" + localStorage.getItem("id") + "&worksid=" + localStorage.getItem("key") + "&content=" + that.pinglun1,
+                    }).done(function (msg) {
+                        // alert(msg.res)
+                        that.comment = msg.comment
+                        if (msg.res == 1) {
+                            that.pinglun1 = ""
+                        }
+                    });
+                   
+                   
+                   
+                },
+                tuichu() {
+
+                    localStorage.setItem("login", 0)
+                    localStorage.setItem("id", -1)
+                    this.login = 0
+                    console.log(this.login)
+                }, 
+                ab() {
+                    window.location.href = 'blibli项目/Blibili登录页面.html'
+                },
+                alert() {
+                    alert("请登录")
+                },
+                seekmethod(){
+                    localStorage.setItem("seek",this.seek)
+                    window.location.href="./seek.html"
+                },
+
+
+            }
+
+        })
+    </script>
+
+</body>
+
+</html>

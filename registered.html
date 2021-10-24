@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录</title>
+    <link rel="stylesheet" type="text/css" href="blibli.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+<body>
+
+    <div id="app">
+        <div class="head" >
+            <div style="display:block;display: flex;"><img style="width: 100px;height: 60px;"
+                    src="../bilibil图片/Snipaste_2021-06-03_11-54-15.png">
+                <div
+                    style="display: flex; letter-spacing: 3px;height: 60px;line-height: 60px;display: inline-block;vertical-align: middle;">
+                    主站 番剧 游戏中心 直播 会员购 漫画 赛事 BW <img style="line-height: 60px;vertical-align: top;margin-top: 13px;"
+                        src="../bilibil图片/手机.png">下载APP</div>
+            </div>
+            <div style="line-height: 60px;">
+                <input type="text" style="width: 450px;height: 30px;"><img style="vertical-align: top;margin-top: 13px;"
+                    src="../bilibil图片/Snipaste_2021-06-07_15-44-33.png">
+            </div>
+            <div style="letter-spacing: 3px;display: flex;"><span style="color: #00a1d6;margin-right: 10px;">
+                    <h2>登录</h2>
+                </span>大会员 消息 动态 收藏 历史记录 创作中心<div
+                    style="margin-top:10px; width: 100px;height: 35px;background-color: #fb7299;line-height: 35px;text-align: center;">
+                    <h1 style="color: white;font-size: 30px;">投稿</h1>
+                </div>
+            </div>
+        </div>
+        <div class="backgroundhead"></div>
+        <div class="Login">
+            <div class="head">
+                <h3 style="margin:0 auto;">登录</h3>
+            </div>
+            <div class="logining">
+                <div class="logining1">
+                    <img src="../bilibil图片/Snipaste_2021-06-07_14-25-00.png">
+                    <div class="donghua1"></div>
+                    <div>
+                        <h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;请扫码登录少爷</h3>
+                    </div>
+                </div>
+                <div class="logining3">
+                    <input type="text" value="" style="margin-bottom: 3%;" v-model="account"><br>
+                    <input type="text" value="" v-model="pwd"><br>
+                    <input style="vertical-align: middle; width: 15px;height: 15px;" type="checkbox"><span
+                        style="font-size: 3px;">记住我</span><br><br>
+                    <input style="width: 70px;height: 30px;" type="submit" value="登录"  @click="worksInto">&nbsp;
+                    <input style="width: 70px;height: 30px;" type="submit" value="注册">&nbsp;&nbsp;<br><br>
+                    <img src="../bilibil图片/Snipaste_2021-06-07_15-42-06.png">微信登陆 &nbsp;
+                    <img src="../bilibil图片/Snipaste_2021-06-07_15-42-18.png">QQ登录 &nbsp;
+                    <img src="../bilibil图片/Snipaste_2021-06-07_15-42-26.png">微博登录
+    
+                </div>
+            </div>
+        </div>
+        <div class="link">
+            <div class="hezi">
+                <span style="color:#9999a6">
+                    <h2>Blibli</h2>
+                </span><br>
+                <ul>
+                    <li>关于我们</li><br>
+                    <li>联系我们</li><br>
+                    <li>用户协议</li><br>
+                    <li>加入我们</li><br>
+                </ul>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <ul>
+                    <li>友情链接</li><br>
+                    <li>隐私政策</li><br>
+                    <li>bilibli认证</li><br>
+                    <li>Inverstore</li><br>
+                </ul>
+    
+    
+            </div>
+            <div class="hezi">
+                <span style="color:#9999a6">
+                    <h2>传送门</h2>
+                </span><br>
+                <ul>
+                    <li>官网</li><br>
+                    <li>登录/注册</li><br>
+                    <li>用户管理</li><br>
+                </ul>
+            </div>
+            <div class="hezi">
+                <img src="../bilibil图片/Snipaste_2021-06-07_15-42-36.png">&nbsp;&nbsp;
+                <img src="../bilibil图片/Snipaste_2021-06-07_15-42-41.png">&nbsp;&nbsp;
+                <img src="../bilibil图片/Snipaste_2021-06-07_15-42-46.png">&nbsp;&nbsp;
+            </div>
+        </div>
+        <div class="workpartment"></div>
+    </div>
+    
+    
+
+    <script>
+        
+        var app = new Vue({
+            el: '#app',
+            data: {
+                serverurl:"http://localhost:8080/",
+                nav_left: ["主站", "番剧", "游戏中心", "直播", "会员购", "漫画", "赛事"],
+                nav_right: ['大会员', '消息', '动态', '收藏', '历史', '创作中心'],
+                account:"",
+                pwd:"",
+            },
+            methods: {
+                worksInto() {
+                    var that = this;
+                    $.ajax({
+                        method: "GET",//请求模式，默认是GET
+                        headers: {//请求头，可以省略
+                            Accept: "application/json; charset=utf-8"
+                        },
+                        url: that.serverurl+"user/login?account="+that.account+"&pwd="+that.pwd,//请求路径，必传
+                    }).done(function (msg) {
+                        if(msg.res==1){
+                            window.location.href="../index01.html"
+                            localStorage.setItem("info",msg.info)
+                            localStorage.setItem("login",1)
+                            localStorage.setItem("id",msg.userid)
+                        }else{
+                            alert(msg.msg)
+                        }
+                        console.log(msg.res)
+
+                    });
+
+                },
+                tiaozhuan(id){
+                   localStorage.setItem("key",id)
+                    window.location.href="contentDemo.html"
+
+                }
+            }
+        })
+
+    </script>
+</body>
+
+</html>
